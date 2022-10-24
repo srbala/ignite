@@ -1,0 +1,155 @@
+openqa-cmds
+
+Live iso, boot to anaconda
+https://openqa.fedoraproject.org/tests/1525438#
+
+Check selinux
+https://openqa.fedoraproject.org/tests/1525460
+
+Fedora aarch64 
+https://openqa.fedoraproject.org/tests/1523537
+
+sudo openqa-cli api -X POST isos \
+  ISO=AlmaLinux-8.6-x86_64-minimal.iso \
+  ARCH=x86_64 \
+  DISTRI=almalinux \
+  FLAVOR=minimal-iso \
+  VERSION=8.6 \
+  MACHINE=uefi \
+  BUILD="$(date +%Y%m%d.%H%M%S).0"
+
+
+
+curl -LO https://dlcdn.apache.org/tomcat/tomcat-10/v10.0.27/bin/apache-tomcat-10.0.27.zip
+
+systemctl status firewalld
+sudo firewall-cmd --zone=public --permanent --add-service=http
+sudo firewall-cmd --zone=public --permanent --add-service=https
+sudo firewall-cmd --reload
+
+
+
+sudo dnf install fuse-sshfs -y
+sudo mkdir /mnt/droplet
+sudo sshfs -o allow_other,default_permissions sammy@your_other_server:~/ /mnt/droplet
+ls /mnt/droplet
+sudo umount /mnt/droplet
+
+sudo nano /etc/fstab
+sammy@your_other_server:~/ /mnt/droplet fuse.sshfs noauto,x-systemd.automount,_netdev,reconnect,identityfile=/home/sammy/.ssh/id_rsa,allow_other,default_permissions 0 0
+
+
+
+
+openqa-cli api --host 'http://localhost' -X POST jobs \
+    'ARCH=x86_64' 'ARCH_BASE_MACHINE=64bit' \
+    'BACKEND=qemu' \
+    VERSION=8.6 \
+    BUILD="$(date +%Y%m%d.%H%M%S).0" \
+    'DISTRI=almalinux' 'FLAVOR=minimal.iso' \
+    'IMAGETYPE=boot' \
+    'ISO=AlmaLinux-8.6-x86_64-minimal.iso' \
+    'MACHINE=uefi' 'MEMCHECK=1' \
+    'NICTYPE_USER_OPTIONS=net=172.16.2.0/24' \
+    'PART_TABLE_TYPE=gpt''QEMUCPU=Nehalem' \
+    'QEMUCPUS=2' 'QEMURAM=3072' 'QEMUVGA=virtio' \
+    'QEMU_HOST_IP=172.16.2.2' 'QEMU_MAX_MIGRATION_TIME=480' \
+    'QEMU_VIRTIO_RNG=1' \
+    'SUBVARIANT=minimal.iso' 'TEST=memory_check' \
+    'TEST_SUITE_NAME=memory_check' \
+    'TEST_TARGET=NONE' \
+    'UEFI=1' 'UEFI_PFLASH_CODE=/usr/share/edk2/ovmf/OVMF_CODE.fd' 'UEFI_PFLASH_VARS=/usr/share/edk2/ovmf/OVMF_VARS.fd' \
+    'WORKER_CLASS=qemu_x86_64' 'XRES=1024' 'YRES=768' '_GROUP_ID=1'
+    
+  ----------------------------
+openqa-cli api --host 'http://localhost' -X POST jobs \
+    'ARCH=x86_64' 'ARCH_BASE_MACHINE=64bit' \
+    'BACKEND=qemu' \
+    VERSION=8.6 \
+    BUILD="$(date +%Y%m%d.%H%M%S).0" \
+    'DISTRI=almalinux' 'FLAVOR=minimal.iso' \
+    'IMAGETYPE=boot' \
+    'ISO=AlmaLinux-8.6-x86_64-minimal.iso' \
+    'MACHINE=uefi' 'MEMCHECK=1' \
+    'NICTYPE_USER_OPTIONS=net=172.16.2.0/24' \
+    'PACKAGE_SET=workstation' \
+    'PART_TABLE_TYPE=gpt''QEMUCPU=Nehalem' \
+    'QEMUCPUS=2' 'QEMURAM=3072' 'QEMUVGA=virtio' \
+    'QEMU_HOST_IP=172.16.2.2' 'QEMU_MAX_MIGRATION_TIME=480' \
+    'QEMU_VIRTIO_RNG=1' \
+    'SUBVARIANT=minimal.iso' 'TEST=memory_check' \
+    'TEST_SUITE_NAME=memory_check' \
+    'TEST_TARGET=NONE' \
+    'UEFI=1' 'UEFI_PFLASH_CODE=/usr/share/edk2/ovmf/OVMF_CODE.fd' 'UEFI_PFLASH_VARS=/usr/share/edk2/ovmf/OVMF_VARS.fd' \
+    'WORKER_CLASS=qemu_x86_64' 'XRES=1024' 'YRES=768' '_GROUP_ID=1'  
+    
+----------------------------
+openqa-cli api --host 'http://localhost' -X POST jobs \
+    'ARCH=x86_64' 'ARCH_BASE_MACHINE=64bit' \
+    'BACKEND=qemu' \
+    VERSION=8.6 \
+    BUILD="-uefi-$(date +%Y%m%d.%H%M%S).0" \
+    'DISTRI=almalinux' 'FLAVOR=boot.iso' \
+    'HDDSIZEGB=13' 'IMAGETYPE=boot' \
+    'ISO=AlmaLinux-8.6-x86_64-boot.iso' \
+    'MACHINE=uefi' 'MEMCHECK=1' \
+    'NICTYPE_USER_OPTIONS=net=172.16.2.0/24' \
+    'PACKAGE_SET=workstation' \
+    'PART_TABLE_TYPE=gpt''QEMUCPU=Nehalem' \
+    'QEMUCPUS=2' 'QEMURAM=3072' 'QEMUVGA=virtio' \
+    'QEMU_HOST_IP=172.16.2.2' 'QEMU_MAX_MIGRATION_TIME=480' \
+    'QEMU_VIRTIO_RNG=1' \
+    'SUBVARIANT=minimal.iso' 'TEST=memory_check' \
+    'TEST_SUITE_NAME=memory_check' \
+    'TEST_TARGET=NONE' \
+    'UEFI=1' 'UEFI_PFLASH_CODE=/usr/share/edk2/ovmf/OVMF_CODE.fd' 'UEFI_PFLASH_VARS=/usr/share/edk2/ovmf/OVMF_VARS.fd' \
+    'WORKER_CLASS=qemu_x86_64' 'XRES=1024' 'YRES=768' '_GROUP_ID=2'    
+    
+    
+    
+----------------------------
+openqa-cli api --host 'http://localhost' -X POST jobs \
+    'ARCH=x86_64' 'ARCH_BASE_MACHINE=64bit' \
+    'BACKEND=qemu' \
+    VERSION=8.7 \
+    BUILD="-uefi-$(date +%Y%m%d.%H%M%S).0" \
+    'DISTRI=almalinux' 'FLAVOR=minimal.iso' \
+    'HDDSIZEGB=13' 'IMAGETYPE=boot' \
+    'ISO=AlmaLinux-8.7-beta-1-x86_64-minimal.iso' \
+    'MACHINE=uefi' 'MEMCHECK=1' \
+    'NICTYPE_USER_OPTIONS=net=172.16.2.0/24' \
+    'PART_TABLE_TYPE=gpt''QEMUCPU=Nehalem' \
+    'QEMUCPUS=2' 'QEMURAM=3072' 'QEMUVGA=virtio' \
+    'QEMU_HOST_IP=172.16.2.2' 'QEMU_MAX_MIGRATION_TIME=480' \
+    'QEMU_VIRTIO_RNG=1' \
+    'SUBVARIANT=minimal.iso' 'TEST=install_minimal' \
+    'TEST_SUITE_NAME=install_minimal' \
+    'TEST_TARGET=NONE' \
+    'UEFI=1' 'UEFI_PFLASH_CODE=/usr/share/edk2/ovmf/OVMF_CODE.fd' 'UEFI_PFLASH_VARS=/usr/share/edk2/ovmf/OVMF_VARS.fd' \
+    'WORKER_CLASS=qemu_x86_64' 'XRES=1024' 'YRES=768' '_GROUP_ID=2'     
+
+openqa-cli api --host 'http://localhost' -X POST jobs \
+    'ARCH=x86_64' 'ARCH_BASE_MACHINE=64bit' \
+    'BACKEND=qemu' \
+    VERSION=8.7 \
+    BUILD="-bios-$(date +%Y%m%d.%H%M%S).0" \
+    'DISTRI=almalinux' 'FLAVOR=minimal.iso' \
+    'HDDSIZEGB=13' 'IMAGETYPE=boot' \
+    'ISO=AlmaLinux-8.7-beta-1-x86_64-minimal.iso' \
+    'MACHINE=64bit' 'MEMCHECK=1' \
+    'NICTYPE_USER_OPTIONS=net=172.16.2.0/24' \
+    'PART_TABLE_TYPE=gpt''QEMUCPU=Nehalem' \
+    'QEMUCPUS=2' 'QEMURAM=3072' 'QEMUVGA=virtio' \
+    'QEMU_HOST_IP=172.16.2.2' 'QEMU_MAX_MIGRATION_TIME=480' \
+    'QEMU_VIRTIO_RNG=1' \
+    'SUBVARIANT=minimal.iso' 'TEST=install_minimal' \
+    'TEST_SUITE_NAME=install_minimal' \
+    'TEST_TARGET=NONE' \
+    'WORKER_CLASS=qemu_x86_64' 'XRES=1024' 'YRES=768' '_GROUP_ID=2'     
+
+
+
+
+ROW setttings
+dnf install -y epel-release
+

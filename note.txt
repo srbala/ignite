@@ -1,0 +1,6 @@
+sed -i \
+-e 's#https://repo.almalinux.org/almalinux/$releasever#http://$basearch-pungi-$releasever.almalinux.org/almalinux/$releasever/latest_result/compose#' \
+-e 's#https://repo.almalinux.org/vault/$releasever#http://$basearch-pungi-$releasever.almalinux.org/almalinux/$releasever/latest_result/compose#' \
+-e 's|^mirrorlist|# mirrorlist|' \
+-e 's|^# baseurl|baseurl|' \
+/etc/yum.repos.d/almalinux*.repo
